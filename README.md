@@ -1,4 +1,4 @@
-# MicroBook driver for Apple silicon (unofficial)
+# Motu MicroBook driver for Apple silicon (unofficial)
 
 A DriverKit / AudioDriverKit driver that makes the original **MOTU MicroBook** USB audio interface work on
 Apple silicon Macs. MOTU's own driver for it is an Intel-only kernel extension.
