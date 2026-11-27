@@ -8,7 +8,7 @@ trademarks. No MOTU code or binaries are included; the USB protocol was worked o
 interoperability and then verified against the hardware.
 
 **This is source code, not a download-and-run installer.** To use it you build and sign it yourself, which
-needs a paid Apple Developer account and DriverKit entitlements (see Requirements).
+needs a paid Apple Developer account (see Requirements).
 
 ## Supported hardware
 
@@ -22,7 +22,10 @@ Check yours: `ioreg -p IOUSB -l -w0 | grep -B5 -A20 MicroBook | grep -E "bcdDevi
 
 ## Status
 
-Tested on **one** Apple silicon MacBook Pro running macOS 26.6, with one MicroBook.
+> **Note:** the code in this repository has been built but never installed or run. It differs slightly from the build
+> that was tested on hardware (configurable signing identity, hardware-revision check).
+
+The driver was tested on **one** Apple silicon MacBook Pro running macOS 26.6, with one MicroBook.
 
 Works:
 - Appears as "MOTU MicroBook" in System Settings > Sound
@@ -48,9 +51,12 @@ Not implemented: hardware mixer / CueMix features, other sample rates.
 
 - Xcode, and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
 - A paid Apple Developer Program membership
-- DriverKit entitlements for your team: **USB Transport** and **Audio**. Request them at
-  <https://developer.apple.com/system-extensions/> (USB vendor ID `2045` decimal). Approval is Apple's
-  decision and timing varies. There may be no status page or email; a successful signed build is the proof.
+- DriverKit capabilities for your App ID: **USB Transport** and **Audio**.
+  - For building and running on your own registered Mac, Xcode can use the *development-only* versions of these.
+  - Distributing a build to other people needs Apple's approval. Request it at
+    <https://developer.apple.com/system-extensions/> (USB vendor ID `2045` decimal). The status is shown in the
+    developer portal under Identifiers > your driver's App ID > Capability Requests.
+  - A successful development build does **not** mean your request was approved.
 
 ## Build
 
