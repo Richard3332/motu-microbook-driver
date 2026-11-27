@@ -1,0 +1,15 @@
+# build output and generated project
+build*/
+*.xcodeproj/
+DerivedData/
+# never commit vendor software, disassembly, logs or signing material
+*.pkg
+*.kext/
+*.asm
+*.log
+*.panic
+*.provisionprofile
+*.mobileprovision
+*.p12
+*.cer
+.DS_Store

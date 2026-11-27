@@ -1,0 +1,45 @@
+// Interface-level personality for the MOTU MicroBook (USB 07fd:0004).
+// Milestone 1: register command channel over the interrupt pipes (verified on hardware).
+// Milestone 2: USB-only isochronous streaming test (silence out, level logging in), gated by the
+//              personality property MBRunIsocTest. No AudioDriverKit / audio entitlement needed.
+#ifndef MicroBookInterface_h
+#define MicroBookInterface_h
+
+#include <Availability.h>
+#include <DriverKit/IOService.iig>
+#include <USBDriverKit/IOUSBHostInterface.iig>
+#include <USBDriverKit/IOUSBHostPipe.iig>
+
+class MicroBookInterface : public IOService
+{
+public:
+    virtual bool init() override;
+    virtual void free() override;
+    virtual kern_return_t Start(IOService *provider) override;
+    virtual kern_return_t Stop(IOService *provider) override;
+
+    virtual void ReadComplete(OSAction *action TARGET,
+                              IOReturn status,
+                              uint32_t actualByteCount,
+                              uint64_t completionTimestamp) TYPE(IOUSBHostPipe::CompleteAsyncIO);
+
+    virtual void WriteComplete(OSAction *action TARGET,
+                               IOReturn status,
+                               uint32_t actualByteCount,
+                               uint64_t completionTimestamp) TYPE(IOUSBHostPipe::CompleteAsyncIO);
+
+    virtual void IsochOutComplete(OSAction *action TARGET,
+                                  IOReturn status) TYPE(IOUSBHostPipe::CompleteAsyncIsochIO);
+
+    virtual void IsochInComplete(OSAction *action TARGET,
+                                 IOReturn status) TYPE(IOUSBHostPipe::CompleteAsyncIsochIO);
+
+    kern_return_t PostRead() LOCALONLY;
+    kern_return_t SendReadQuad(uint32_t addr) LOCALONLY;
+    kern_return_t SendWriteQuad(uint32_t addr, uint32_t data) LOCALONLY;
+    void          NextStep() LOCALONLY;
+    kern_return_t StartIsoc() LOCALONLY;
+    void          StopIsoc(const char *why) LOCALONLY;
+};
+
+#endif
